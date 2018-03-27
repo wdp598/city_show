@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skss.city_show.dao.IshopDao">
+	<insert id="insertShop" useGeneratedKeys="true" keyColumn="shop_id"
+		keyProperty="shopId">  <!-- 使用jdbc的getGeneratedKeys获取数据库自增主键值 在mybatis-cconfig中配置 -->
+		insert into
+		tb_shop(OWNER_ID,AREA_ID,SHOP_CATEGORY_ID,SHOP_NAME,SHOP_DESC,SHOP_ADDR,PHONE,SHOP_IMG,PRIORITY,CREATE_TIME,LASTEDIT_TIME,ENABLE_STATUS,ADVICE)
+		values
+		(#{owner.userId},#{area.areaId},#{shopCategory.shopCategoryId},#{shopName},#{shopDesc},#{shopAddr},#{phone},#{shopImg},#{priority},#{createTime},#{lastEditTime},#{enableStatus},#{advice})
+
+	</insert>
+
+<update id="updateShop" parameterType="com.skss.city_show.entity.Shop">
+   update tb_shop <!-- 此处使用的是动态sql语句 -->
+     <set>
+     <!-- <if test="xxx001!=null">xxx_xxx=#{xxx001}</if>  xxx001表示实体类里面的某个属性   xxx_xxx表示数据库里面与实体类相对应的字段-->
+     <if test="shopName!=null">SHOP_NAME=#{shopName},</if>
+     <if test="shopDesc!=null">SHOP_DESC=#{shopDesc},</if>
+     <if test="shopAddr!=null">SHOP_ADDR=#{shopAddr},</if>
+     <if test="phone!=null">PHONE=#{phone},</if>
+     <if test="priority!=null">PRIORITY=#{priority},</if>
+     <if test="lastEditTime!=null">LASTEDIT_TIME=#{lastEditTime},</if>
+     <if test="enableStatus!=null">ENABLE_STATUS=#{enableStatus},</if>
+     <if test="advice!=null">ADVICE=#{advice},</if>
+     <if test="shopImg!=null">SHOP_IMG=#{shopImg},</if>
+     <if test="shopCategory!=null">SHOP_CATEGORY_ID=#{shopCategory.shopCategoryId},</if>
+     <if test="area!=null">OWNER_ID=#{owner.userId}</if> <!-- 最后一个if不用， -->
+     </set>
+     <where>
+          <if test="shop_id!=0">
+           shop_id=#{shopId}
+          </if>  
+     </where>
+    <!--  where shop_id=#{shopId} -->
+</update>
+
+</mapper> 

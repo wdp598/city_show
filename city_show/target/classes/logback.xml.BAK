@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- scan="true" 配置文件发生改变后，会自动加载配置文件 scanPeriod="60 seconds" 设置配置文件监测时间间隔，若没有单位默认单位是毫秒 
+	debug="true" debug值为true会打印debug内部信息 -->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+	<!-- 定义参数常量 -->
+	<!-- logback的日志级别 trace<debug<info<warn<error -->
+	<property name="log.level" value="debug" /><!-- 日志只显示 debug<info<warn<error这4个级别的日志 -->
+	<property name="log.maxHistory" value="30" /><!-- 日志文件最大保存数量 -->
+	<property mame="log.filePath" value="${catalina.base}/logs/webapps" /> <!-- 日志保留的路径 ${catalina.base}为Tomcat实例的根目录 -->
+	<property name="log.pattern"
+		value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
+		       
+	<!--name="log.pattern"日志输出的格式 -->
+	<!--%d{yyyy-MM-dd HH:mm:ss.SSS} 该条日志的日期 -->
+	<!--[%thread] 该条日志的线程 -->
+	<!--%-5level 该条日志输出的宽度 -->
+	<!--%logger{50} 该条日志属于哪个package下面的哪个类 -->
+	<!--%msg%/n" 该条日志的内容，并换行 -->
+
+	<!-- 日志输出到控制台 -->
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+	</appender>
+
+
+	<!-- debug日志输出 -->
+	<appender name="debugAppender"
+		calss="ch.qos.logback.core.rolling.RollingFileAppender"><!-- 使用哪种appender -->
+		<!-- 文件路径 -->
+		<file>${log.filePath}/debug.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"><!-- 基于时间滚动 -->
+			<!-- 文件名称 -->
+			<fileNamePattern>${log.filePath}/debug/debug.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+				<maxHistory>${log.maxHistory}</maxHistory><!-- 日志文件最大保存数量 -->
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter"> <!-- 过滤掉不属于dubug的日志 -->
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch><!-- 如果是debug的日志，则记录 -->
+			<onMismatch>DENY</onMismatch><!-- 如果不是debug的日志，则不记录 -->
+		</filter>
+	</appender>
+
+
+	<!-- info日志输出 -->
+	<appender name="infoAppender"
+		calss="ch.qos.logback.core.rolling.RollingFileAppender"><!-- 使用哪种appender -->
+		<!-- 文件路径 -->
+		<file>${log.filePath}/info.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBaseRollingPolicy"><!-- 基于时间滚动 -->
+			<!-- 文件名称 -->
+			<fileNamePattern>${log.filePath}/info/info.%d{yyyy-MM-dd}.log.gz
+			</fileNamePattern>
+			<maxHistory>${log.maxHistory}</maxHistory><!-- 日志文件最大保存数量 -->
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter"> <!-- 过滤掉不属于dubug的日志 -->
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch><!-- 如果是debug的日志，则记录 -->
+			<onMismatch>DENY</onMismatch><!-- 如果不是debug的日志，则不记录 -->
+		</filter>
+	</appender>
+
+
+	<!-- error日志输出 -->
+	<appender name="errorAppender"
+		calss="ch.qos.logback.core.rolling.RollingFileAppender"><!-- 使用哪种appender -->
+		<!-- 文件路径 -->
+		<file>${log.filePath}/error.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBaseRollingPolicy"><!-- 基于时间滚动 -->
+			<!-- 文件名称 -->
+			<fileNamePattern>${log.filePath}/error/error.%d{yyyy-MM-dd}.log.gz
+			</fileNamePattern>
+			<maxHistory>${log.maxHistory}</maxHistory><!-- 日志文件最大保存数量 -->
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter"> <!-- 过滤掉不属于dubug的日志 -->
+			<level>error</level>
+			<onMatch>ACCEPT</onMatch><!-- 如果是debug的日志，则记录 -->
+			<onMismatch>DENY</onMismatch><!-- 如果不是debug的日志，则不记录 -->
+		</filter>
+	</appender>
+	
+
+<!--关注 那个package下面的信息（关注整个项目的信息 ）-->
+<logger name="com.skss.city_show" level="${log.level}" additivity="true"> <!--additivity="true"在控制台中输出debugAppender，infoAppender，errorAppender的信息    level="${log.level} 只记录debug级别以上的日志  -->
+  <!-- logger对象往以下3个appender里面输出信息 -->
+  <appender-ref ref="debugAppender"/>
+  <appender-ref ref="infoAppender"/>
+  <appender-ref ref="errorAppender"/>
+</logger>
+<root level="info">
+  <appender-ref ref="consoleAppender"/>
+</root>
+</configuration>

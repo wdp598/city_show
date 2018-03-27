@@ -1,0 +1,9 @@
+2018-03-21 22:02:45.287 [main] DEBUG c.s.c.dao.IshopCategoryDao.getShopCategoryList - ==>  Preparing: select * from tb_shop_Category WHERE parent_id is not null order by priority desc 
+2018-03-21 22:02:45.989 [main] DEBUG c.s.c.dao.IshopCategoryDao.getShopCategoryList - ==> Parameters: 
+2018-03-21 22:02:46.202 [main] DEBUG c.s.c.dao.IshopCategoryDao.getShopCategoryList - <==      Total: 3
+2018-03-21 22:09:01.661 [main] DEBUG c.s.c.dao.IshopCategoryDao.getShopCategoryList - ==>  Preparing: select * from tb_shop_Category WHERE parent_id is not null and parent_id=? order by priority desc 
+2018-03-21 22:09:02.095 [main] DEBUG c.s.c.dao.IshopCategoryDao.getShopCategoryList - ==> Parameters: 3(Long)
+2018-03-21 22:09:02.234 [main] DEBUG c.s.c.dao.IshopCategoryDao.getShopCategoryList - <==      Total: 1
+2018-03-21 22:55:02.135 [main] DEBUG c.s.c.dao.IshopCategoryDao.getShopCategoryList - ==>  Preparing: select * from tb_shop_Category WHERE parent_id is not null order by priority desc 
+2018-03-21 22:55:03.114 [main] DEBUG c.s.c.dao.IshopCategoryDao.getShopCategoryList - ==> Parameters: 
+2018-03-21 22:55:03.365 [main] DEBUG c.s.c.dao.IshopCategoryDao.getShopCategoryList - <==      Total: 3
