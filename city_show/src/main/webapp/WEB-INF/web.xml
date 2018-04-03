@@ -23,4 +23,81 @@
 	</servlet-mapping>
 
 
+<!-- kaptcha验证码 -->
+<servlet>
+        <servlet-name>Kaptcha</servlet-name>
+        <servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+        <!--  是否有边框  -->
+        <init-param>  
+            <param-name>kaptcha.border</param-name>  
+            <param-value>no</param-value>  
+        </init-param>  
+        <init-param> 
+         <!--  背景颜色  --> 
+            <param-name>kaptcha.border.color</param-name>  
+            <param-value>105,179,90</param-value>  
+        </init-param>       
+        <init-param> 
+        <!--  字体颜色  --> 
+            <param-name>kaptcha.textproducer.font.color</param-name>  
+            <param-value>red</param-value>  
+        </init-param>  
+        <init-param>  
+            <param-name>kaptcha.obscurificator.impl</param-name>  
+            <param-value>com.google.code.kaptcha.impl.FishEyeGimpy</param-value>  
+        </init-param>
+        <!--  图片宽度  --> 
+        <init-param>  
+            <param-name>kaptcha.image.width</param-name>  
+            <param-value>135</param-value>  
+        </init-param>  
+        <init-param> 
+        <!-- 图片高度 --> 
+            <param-name>kaptcha.image.height</param-name>  
+            <param-value>50</param-value>  
+        </init-param> 
+        <init-param>  
+        <!-- 使用哪些字符生成验证码 -->
+            <param-name>kaptcha.textproducer.char.string</param-name>  
+            <param-value>ACDEFHKPRSWX345679</param-value>  
+        </init-param> 
+         
+        <init-param>  
+        <!-- 字体大小 -->
+            <param-name>kaptcha.textproducer.font.size</param-name>  
+            <param-value>43</param-value>  
+        </init-param> 
+         <init-param>  
+        <!-- 干扰线 -->
+            <param-name>kaptcha.noise.color</param-name>  
+            <param-value>black</param-value>  
+        </init-param> 
+        
+         
+      <!--   <init-param>  
+          String kaptchaExpected = (String) session.getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);  
+                     必须改成
+                    String kaptchaExpected = (String) session.getAttribute("code");
+            <param-name>kaptcha.session.key</param-name>  
+            <param-value>code</param-value>
+        </init-param> -->  
+        <init-param> 
+        <!-- 字符个数 --> 
+            <param-name>kaptcha.textproducer.char.length</param-name>  
+            <param-value>4</param-value>  
+        </init-param>  
+        <init-param>
+        <!-- 字体  宋体-->
+            <param-name>kaptcha.textproducer.font.names</param-name>  
+            <param-value>Arial</param-value>  
+        </init-param>
+</servlet>
+<servlet-mapping>
+        <servlet-name>Kaptcha</servlet-name>
+        <url-pattern>/Kaptcha</url-pattern>
+</servlet-mapping>
+
+
+
+
 </web-app>
