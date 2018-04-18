@@ -72,15 +72,7 @@
             <param-name>kaptcha.noise.color</param-name>  
             <param-value>black</param-value>  
         </init-param> 
-        
-         
-      <!--   <init-param>  
-          String kaptchaExpected = (String) session.getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);  
-                     必须改成
-                    String kaptchaExpected = (String) session.getAttribute("code");
-            <param-name>kaptcha.session.key</param-name>  
-            <param-value>code</param-value>
-        </init-param> -->  
+   
         <init-param> 
         <!-- 字符个数 --> 
             <param-name>kaptcha.textproducer.char.length</param-name>  

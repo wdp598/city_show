@@ -27,7 +27,8 @@ import com.skss.city_show.enums.ShopStateEnum;
 import com.skss.city_show.service.IareaService;
 import com.skss.city_show.service.IshopCategoryService;
 import com.skss.city_show.service.IshopService;
-import com.skss.city_show.util.HttpServerRequest;
+import com.skss.city_show.util.CaptchaCodeUtil;
+import com.skss.city_show.util.HttpServerRequestUtil;
 
 @Controller
 @RequestMapping("/shopadmin")
@@ -67,12 +68,16 @@ public class ShopManagementController {
 	@RequestMapping(value="/registershop",method=RequestMethod.POST)
 	@ResponseBody
 private Map<String,Object> registerShop(HttpServletRequest request){//http请求头中的所有信息全部封装在request里面
-	//用户在前端表格填写的信息，在表格提交的时候都会封装在request里面
+		//用户在前端表格填写的信息，在表格提交的时候都会封装在request里面
 		Map<String,Object> modelMap=new HashMap<>();
-		
+		boolean verifyCode=CaptchaCodeUtil.comparisonCaptchaCode(request);
+		if(!verifyCode==true){
+			modelMap.put("success", false);
+			modelMap.put("errMsg","验证码输入有误");
+		}
 	//1.接受并转化相应信息，包括店铺信息以及图片信息
 		//1.1接收店铺信息并转换成实体类
-		String shopStr=HttpServerRequest.getString(request, "shopStr");//"shopStr"由前端页面传入
+		String shopStr=HttpServerRequestUtil.getString(request, "shopStr");//"shopStr"由前端页面传入
 	    //使用jackson将字符串shopStr 转化成实体类
 		ObjectMapper objectmapper=new ObjectMapper();
 	    Shop shop=null;

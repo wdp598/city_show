@@ -1,5 +1,5 @@
 /**
- * 更换验证码
+ * 随即生成验证码
  */
 
 function changeVerifyCode(img){

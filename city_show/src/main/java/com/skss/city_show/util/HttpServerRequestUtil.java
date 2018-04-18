@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
  * http请求处理工具
  *
  */
-public class HttpServerRequest {
+public class HttpServerRequestUtil {
 
 	/**
 	 * String 转换成int
