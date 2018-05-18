@@ -10,7 +10,7 @@ public class PersonInfo {
 	 * @author weidp 用戶id
 	 */
 
-	private Long userid;
+	private Long userId;
 	/**
 	 * 用戶姓名
 	 */
@@ -45,12 +45,12 @@ public class PersonInfo {
 	 */
 	private Date lastEidtTime;
 
-	public long getUserid() {
-		return userid;
+	public long getUserId() {
+		return userId;
 	}
 
-	public void setUserid(long userid) {
-		this.userid = userid;
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 
 	public String getName() {

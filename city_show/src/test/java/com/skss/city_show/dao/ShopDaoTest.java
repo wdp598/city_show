@@ -24,7 +24,7 @@ public class ShopDaoTest extends BaseTest{//如果不继承BaseTest  会报空�
     	 PersonInfo owner=new PersonInfo();
     	 Area area=new Area();
     	 ShopCategory shopCategory=new ShopCategory();
-    	 owner.setUserid(1L);
+    	 owner.setUserId(1L);
     	 area.setAreaId(1);
     	 shopCategory.setShopCategoryId(1L);
     	 shop.setArea(area);

@@ -29,8 +29,8 @@
      <if test="area!=null">OWNER_ID=#{owner.userId}</if> <!-- 最后一个if不用， -->
      </set>
      <where>
-          <if test="shop_id!=0">
-           shop_id=#{shopId}
+          <if test="shopId!=0">
+           SHOP_ID=#{shopId}
           </if>  
      </where>
     <!--  where shop_id=#{shopId} -->

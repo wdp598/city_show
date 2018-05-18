@@ -52,7 +52,7 @@ public class ShopServiceImpl implements IshopService{
 			// TODO: handle exception
 			throw new ShopOperationException("添加店铺失败"+e.getMessage());
 		}
-	//System.err.println("shop添加成功");
+	System.err.println("shop添加成功");
 	
 		return new ShopExecution(ShopStateEnum.CHCK,shop);
 	}

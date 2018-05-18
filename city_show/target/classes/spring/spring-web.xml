@@ -21,6 +21,17 @@
 		<property name="prefix" value="/WEB-INF/html/" /><!-- 根据请求路径解析/WEB-INF/下的html文件夹下的页面 -->
 		<property name="suffix" value=".html" /><!-- 解析成后缀为.html的页面 -->
 	</bean>
+	<!-- 文件上传解析器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<!--上传文件的默认字符  -->
+	 <property name="defaultEncoding" value="utf-8"></property>
+	 <!-- 1024*1024*20 =20M  上传文件的最大尺寸-->
+	 <property name="maxUploadSize" value="20971520"></property>
+	 <!-- 上传文件的最大内存 -->
+	 <property name="maxInMemorySize" value="20971520"></property>
+	</bean>
+	
+	
 	<!-- 4.扫描control层 -->
 	<context:component-scan base-package="com.skss.city_show.web" />
 

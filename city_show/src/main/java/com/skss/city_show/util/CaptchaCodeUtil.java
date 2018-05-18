@@ -27,18 +27,12 @@ public class CaptchaCodeUtil {
 		String getVerifyCodeForImg = (String) request.getSession()
 				.getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
 //输入的验证码从提交的表单里面获取，这里的表单是通过js里面的formData提交的
-		String inputVerifyCodeForInput=HttpServerRequestUtil.getString(request, "verifyCodeActual");
+		String inputVerifyCodeForInput=HttpServerRequestUtil.getString(request, "verifyCodeActual");//从request里面获取填入的验证码，确认str与前端传入的key相同，但是inputVerifyCodeForInput=null,原因是缺少处理文件流的视图配置（在spring-web文件中配置<!-- 文件上传解析器 -->）
 		//比较
-		try {
-			if(!getVerifyCodeForImg.equals(inputVerifyCodeForInput)||getVerifyCodeForImg==null){
+		
+			if(getVerifyCodeForImg==null||!getVerifyCodeForImg.equals(inputVerifyCodeForInput)){
 				return false;
 			}
-		} catch (Exception e) {
-			logger.info("比较输入的验证码与生成的验证码时出错："+e.getMessage());
-			// TODO: handle exception
-			return false;
-		}
-		
 		return true;
 
 	}

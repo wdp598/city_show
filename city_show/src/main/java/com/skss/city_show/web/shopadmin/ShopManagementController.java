@@ -43,7 +43,7 @@ public class ShopManagementController {
 	@RequestMapping(value="/getshopinitinfo",method=RequestMethod.GET)
 	@ResponseBody
 	public Map<String,Object> getinitshopinfo(ShopCategory shopCategory){
-	System.out.println("进入getinitshopinfo方法");
+	System.out.println("进入获取店铺类别与区域的方法");
 		Map<String,Object> shopCategoryModelMap=new HashMap<String,Object>();
 		List<ShopCategory> shopCategoryList=new ArrayList<ShopCategory>();
 		List<Area> areaList=new ArrayList<Area>();
@@ -53,7 +53,10 @@ public class ShopManagementController {
 			shopCategoryModelMap.put("shopCategoryList", shopCategoryList);
 			shopCategoryModelMap.put("areaList", areaList);
 			shopCategoryModelMap.put("success", true);
-			System.out.println("获得店铺列表："+shopCategoryList);
+			
+			for(ShopCategory shopCategory2:shopCategoryList) {
+				System.out.println("获得店铺列表："+shopCategory2.getShopCategoryName());
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			shopCategoryModelMap.put("success", false);
@@ -74,6 +77,7 @@ private Map<String,Object> registerShop(HttpServletRequest request){//http请求
 		if(!verifyCode==true){
 			modelMap.put("success", false);
 			modelMap.put("errMsg","验证码输入有误");
+			return modelMap;
 		}
 	//1.接受并转化相应信息，包括店铺信息以及图片信息
 		//1.1接收店铺信息并转换成实体类
@@ -98,7 +102,7 @@ private Map<String,Object> registerShop(HttpServletRequest request){//http请求
 	    	 //转换成多部分request  
 	    	MultipartHttpServletRequest multipartHttpRequest=(MultipartHttpServletRequest)request;//如果不强制转换成MultipartHttpServletRequest，后续的Contrller就获取不到file
 	   //从multipartHttpRequest获取上传文件
-	    	commonsMultipartFile=(CommonsMultipartFile) multipartHttpRequest.getFile("shopImg");//"shopImg"来自前端页面的name
+	    	commonsMultipartFile=(CommonsMultipartFile) multipartHttpRequest.getFile("shopImg");//"shopImg"来自前端JS的name
 	    }else{
 	    	modelMap.put("ssuccess", false);
 			modelMap.put("errMsg", "上传图片为空");
@@ -109,7 +113,7 @@ private Map<String,Object> registerShop(HttpServletRequest request){//http请求
 			//尽量减少对前端信息的依赖
 			//店主信息，通过session获取
 			PersonInfo owner=new PersonInfo();
-			owner.setUserid(1L);
+			owner.setUserId(1L);
 			shop.setOwner(owner);
 			ShopExecution shopExecution = null;
 			try {
