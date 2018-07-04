@@ -3,6 +3,69 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skss.city_show.dao.IshopDao">
+
+<resultMap type="com.skss.city_show.entity.Shop" 
+   id="selectShopByShopId">
+	<id column="shop_id" property="shopId" />
+	<result column="SHOP_NAME" property="shopName" />
+	<result column="SHOP_DESC" property="shopDesc" />
+	<result column="SHOP_ADDR" property="shopAddr" />
+	<result column="PHONE" property="phone" />
+	<result column="SHOP_IMG" property="shopImg" />
+	<result column="PRIORITY" property="priority" />
+	<result column="CREATE_TIME" property="createTime" />
+	<result column="LASTEDIT_TIME" property="lastEditTime" />
+	<result column="ENABLE_STATUS" property="enableStatus" />
+	<result column="ADVICE" property="advice" />
+	<!-- 定义复合类型 -->
+	 <association property="area" column="AREA_ID"
+		javaType="com.skss.city_show.entity.Area">
+		<id column="AREA_ID" property="areaId" />
+		<result column="AREA_NAME" property="areaName" />
+	</association> 
+	<association property="shopCategory"
+		column="SHOP_CATEGORY_ID"
+		javaType="com.skss.city_show.entity.ShopCategory">
+		<id column="SHOPCATEGORY_ID" property="shopCategoryId" />
+		<result column="SHOPCATEGORY_NAME" property="shopCategoryName" />
+	</association> 
+	<association property="owner" column="OWNER_ID"
+		javaType="com.skss.city_show.entity.PersonInfo">
+	<id column="USER_ID" property="userId" />
+	<result column="NAME" property="name" />  
+	</association>
+</resultMap>
+
+	<select id="queryShopByShopId" resultMap="selectShopByShopId"
+		parameterType="Long">
+		SELECT
+		s.shop_id,
+		s.SHOP_NAME,
+		s.SHOP_DESC,
+		s.SHOP_ADDR,
+		s.PHONE,
+		s.SHOP_IMG,
+		s.PRIORITY,
+		s.CREATE_TIME,
+		s.LASTEDIT_TIME,
+		s.ENABLE_STATUS,
+		s.ADVICE,
+		a.AREA_ID,
+		a.AREA_NAME,
+		sc.SHOPCATEGORY_ID,
+		sc.SHOPCATEGORY_NAME
+		FROM
+		tb_shop s,
+		tb_area a,
+		tb_shop_Category sc
+		WHERE
+		s.AREA_ID=a.AREA_ID
+		AND
+		s.SHOP_CATEGORY_ID=sc.SHOPCATEGORY_ID
+	    AND
+		s.SHOP_ID=#{shopId}
+	</select>
+
 	<insert id="insertShop" useGeneratedKeys="true" keyColumn="shop_id"
 		keyProperty="shopId">  <!-- 使用jdbc的getGeneratedKeys获取数据库自增主键值 在mybatis-cconfig中配置 -->
 		insert into
@@ -11,7 +74,7 @@
 		(#{owner.userId},#{area.areaId},#{shopCategory.shopCategoryId},#{shopName},#{shopDesc},#{shopAddr},#{phone},#{shopImg},#{priority},#{createTime},#{lastEditTime},#{enableStatus},#{advice})
 
 	</insert>
-
+	
 <update id="updateShop" parameterType="com.skss.city_show.entity.Shop">
    update tb_shop <!-- 此处使用的是动态sql语句 -->
      <set>

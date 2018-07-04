@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.skss.city_show.entity.Area;
+import com.skss.city_show.service.IareaService;
 import com.skss.city_show.service.impl.AreaServiceImpl;
 
 import ch.qos.logback.classic.Logger;
@@ -23,7 +24,7 @@ public class AreaController {
 	Logger logger=(Logger) LoggerFactory.getLogger(AreaController.class);
 	
 @Autowired
-private AreaServiceImpl areaServiceImpl;
+private IareaService iAreaService;
 @RequestMapping(value="/listarea",method=RequestMethod.GET)
 @ResponseBody
 	private Map<String,Object> listArea(){
@@ -32,7 +33,7 @@ private AreaServiceImpl areaServiceImpl;
 		Map<String,Object> modelMap= new HashMap<String,Object>();
 		List<Area> list=new ArrayList<Area>();
 		try {
-			list=areaServiceImpl.queryAreaList();
+			list=iAreaService.queryAreaList();
 			modelMap.put("rows", list);
 			modelMap.put("totals", list.size());
 		} catch (Exception e) {

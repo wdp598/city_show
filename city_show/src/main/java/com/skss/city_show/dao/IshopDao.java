@@ -4,7 +4,7 @@ import com.skss.city_show.entity.Shop;
 
 /**
  * @author weidp
- *注册店铺
+ *店铺
  */
 public interface IshopDao {
 /**
@@ -20,4 +20,11 @@ public interface IshopDao {
 	 * @return int
 	 */
 	public int updateShop(Shop shop);
+	
+	/**
+	 * 根据店铺id查询店铺
+	 * @param shopId
+	 * @return NAME
+	 */
+	public Shop queryShopByShopId(long shopId);
 }

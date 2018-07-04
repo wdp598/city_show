@@ -42,6 +42,7 @@ public class ShopDaoTest extends BaseTest{//如果不继承BaseTest  会报空�
     	 System.out.println(shop.getShopName());
      }
      @Test
+     @Ignore
 	public void updateShop(){
     	 Shop shop=new Shop();
     	 shop.setShopId(27L);
@@ -59,7 +60,14 @@ public class ShopDaoTest extends BaseTest{//如果不继承BaseTest  会报空�
     	 System.out.println(shop.getShopDesc());
 		
 	}
-     
-     
+     @Test
+     public void queryShopByShopId(){
+    	 
+    	 Shop shop=new Shop();
+    	 Long shopId=(long) 64;
+    	 shop=iShopDao.queryShopByShopId(shopId);
+    	 System.out.println(shop.getShopName()+"------"+shop.getShopId());
+    	
+     }   
     
 }
