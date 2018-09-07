@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Date;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,7 +22,7 @@ public class ShopServiceTest extends BaseTest{
 	private IshopService shopService;
 
 
-@Test
+
 public void testAddShop(){
 	Shop shop=new Shop();
 	 shop.setShopId(27L);
@@ -47,5 +48,25 @@ public void testAddShop(){
 	/*System.err.println("图片地址是："+shopImg);*/
 	assertEquals(ShopStateEnum.CHCK.getState(),se.getState());
 }
-	
+
+@Test
+ public void testModfyshop() {
+	Shop shop=new Shop();
+	shop.setShopId(64L);
+	shop.setShopName("修改后的店铺名字64");
+	File shopImg=new File("D:/apache-tomcat-8.0.47/Img/magazine-unlock-02-2.3.781-_0b600ad872d7428fbb72af8be63e373a.jpg");
+    try {
+		InputStream inputStreamShopImg=new FileInputStream(shopImg);
+		
+		ShopExecution shopExection=	shopService.modifyShop(shop, inputStreamShopImg, "magazine-unlock-02-2.3.781-_0b600ad872d7428fbb72af8be63e373a.jpg");
+   System.out.println("修改后的图片地址：："+shopExection.getShop().getShopImg());
+    
+    } catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    
+}
+
+
 }

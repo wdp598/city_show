@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skss.city_show.dao.IshopDao">
-
+<!-- 根据店铺id查询店铺  返或基本店铺信息以及区域信息 商品类别信息-->
 <resultMap type="com.skss.city_show.entity.Shop" 
    id="selectShopByShopId">
 	<id column="shop_id" property="shopId" />
@@ -35,7 +35,6 @@
 	<result column="NAME" property="name" />  
 	</association>
 </resultMap>
-
 	<select id="queryShopByShopId" resultMap="selectShopByShopId"
 		parameterType="Long">
 		SELECT
@@ -74,7 +73,7 @@
 		(#{owner.userId},#{area.areaId},#{shopCategory.shopCategoryId},#{shopName},#{shopDesc},#{shopAddr},#{phone},#{shopImg},#{priority},#{createTime},#{lastEditTime},#{enableStatus},#{advice})
 
 	</insert>
-	
+	<!-- 更改店铺信息  传入一个shop实体类，什么不为空就更改什么内容 -->
 <update id="updateShop" parameterType="com.skss.city_show.entity.Shop">
    update tb_shop <!-- 此处使用的是动态sql语句 -->
      <set>

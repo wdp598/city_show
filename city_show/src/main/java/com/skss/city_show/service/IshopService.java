@@ -15,5 +15,22 @@ public interface IshopService {
  */
 public ShopExecution addShop(Shop shop,InputStream inputStreamShopImg,String fileName);//InputStream中不能获取到文件名
 	
+
+/**
+ * 根据店铺id查询店铺返回基本店铺信息以及区域信息和商店类别信息
+ * @param shopId
+ * @return NAME
+ */
+public Shop queryShopByShopId(long shopId);
+
+/**
+ * 修改店铺信息，包括对图片的处理
+* @param shop
+* @param inputStreamShopImg,String fileName
+* @return ShopExecution
+* 
+*/
+public ShopExecution modifyShop(Shop shop,InputStream inputStreamShopImg,String fileName);//InputStream中不能获取到文件名
 	
+
 }

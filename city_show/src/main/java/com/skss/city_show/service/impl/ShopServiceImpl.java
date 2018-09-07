@@ -70,5 +70,47 @@ public class ShopServiceImpl implements IshopService{
 		/*System.out.println("写入数据库的相对路径是"+shopImgAddr);*/
 		shop.setShopImg(shopImgAddr);
 	}
+	
+	/** 根据店铺id查询店铺信息
+	 *
+	 */
+	@Override
+	public Shop queryShopByShopId(long shopId) {
+		// TODO Auto-generated method stub
+		
+		return iShopDao.queryShopByShopId(shopId);
+	}
+	/**
+	 * 修改店铺信息包括图片信息
+	 *1.判断是否需要修改图片
+	 *2.修改店铺信息
+	 * */
+	@Override
+	public ShopExecution modifyShop(Shop shop, InputStream inputStreamShopImg, String fileName) {
+		// TODO Auto-generated method stub
+		if(shop==null||shop.getShopId()==null) {//shop为null
+			return new ShopExecution(ShopStateEnum.NULL_SHOP);
+		}else {
+		//1.判断是否需要修改图片
+		if(inputStreamShopImg!=null&&fileName!=null&&!"".equals(fileName)) {//图片不为null
+			Shop dbshop=iShopDao.queryShopByShopId(shop.getShopId());
+			if(dbshop.getShopImg()!=null) {
+				ImgUtil.deleteImgFile(dbshop.getShopImg());
+			}else {
+				addShop(shop, inputStreamShopImg, fileName);
+			}
+			
+		}
+		//2.修改店铺信息
+		//shop.setLastEditTime(new Date());
+		int effectedNum=iShopDao.updateShop(shop);
+		if(effectedNum<=0) {
+			return new ShopExecution(ShopStateEnum.INNER_ERROR);
+		}else {
+			shop=iShopDao.queryShopByShopId(shop.getShopId());
+			return new ShopExecution(ShopStateEnum.SUCESS,shop);
+		}
+		}
+	}
 
 }

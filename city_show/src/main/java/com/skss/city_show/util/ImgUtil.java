@@ -113,7 +113,27 @@ public class ImgUtil {
 		return nowTimeStr+randomNum;
 	}
 	
-	
+	/**
+	 * storePath可能是文件路径或是目录路径，
+	 * 如果是文件路径则删除文件，
+	 * 如果是目录路径则删除目录下的所有文件。
+	 * @param storePath
+	 */
+	public static void  deleteImgFile(String storePath) {
+		File fileOrPath=new File(ImgUtil.basePath+storePath);
+		if(fileOrPath.exists()) {
+		if(fileOrPath.isDirectory()) {//如果storePath是目录路径，则遍历出来递归删除下面的文件
+			File files[] =fileOrPath.listFiles();//将目录下的所有文件放入数组
+			for(int i=0;i<files.length;i++) {
+             files[i].delete();//递归删除
+			}
+			/*for (File f:files) {
+			f.delete()	;
+			}*/		
+		}
+		fileOrPath.delete();
+		}
+	}
 	
 	
 	

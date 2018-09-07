@@ -61,13 +61,14 @@ public class ShopDaoTest extends BaseTest{//如果不继承BaseTest  会报空�
 		
 	}
      @Test
-     public void queryShopByShopId(){
+     public void testqueryShopByShopId(){
     	 
     	 Shop shop=new Shop();
     	 Long shopId=(long) 64;
     	 shop=iShopDao.queryShopByShopId(shopId);
     	 System.out.println(shop.getShopName()+"------"+shop.getShopId());
-    	
+    	 System.out.println(shop.getArea().getAreaName()+"------"+"根据店铺id查询出的区域名称");
+    	 System.out.println(shop.getShopCategory().getShopCategoryName()+"------"+"根据店铺id查询出的店铺类别名称");
      }   
     
 }
