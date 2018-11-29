@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.skss.city_show.dao.IproductCategoryDao">
+	<select id="queryProductCategoryList"
+		resultType="com.skss.city_show.entity.ProductCategory"
+		parameterType="Long">
+		select
+		PRODUCT_CATEGORY_ID,
+		PRODUCT_CATEGORY_NAME,
+		PRIORITY,
+		CREATE_TIME,
+		SHOP_ID,
+		LAST_EIDT_TIME
+		from
+		tb_product_category
+		where
+		SHOP_ID = #{shopId}<!-- 参数末尾不能有符号（包括分号）否则会造成参数无效 -->
+		order by PRIORITY desc
+	</select>
+
+
+</mapper>

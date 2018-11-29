@@ -1,8 +1,9 @@
 package com.skss.city_show.dao;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -60,7 +61,7 @@ public class ShopDaoTest extends BaseTest{//如果不继承BaseTest  会报空�
     	 System.out.println(shop.getShopDesc());
 		
 	}
-     @Test
+    
      public void testqueryShopByShopId(){
     	 
     	 Shop shop=new Shop();
@@ -70,5 +71,17 @@ public class ShopDaoTest extends BaseTest{//如果不继承BaseTest  会报空�
     	 System.out.println(shop.getArea().getAreaName()+"------"+"根据店铺id查询出的区域名称");
     	 System.out.println(shop.getShopCategory().getShopCategoryName()+"------"+"根据店铺id查询出的店铺类别名称");
      }   
-    
+     @Test
+     public void testqueryShopCount() {
+    	 Shop shop=new Shop();
+    	 //PersonInfo owner=new PersonInfo();
+    	 //owner.setUserId(2L);
+    	 //shop.setShopId(8L);
+    	 shop.setShopName("好好");
+    	 List<Shop> shopList=iShopDao.queryShopList(shop, 0, 10);
+    	  //int countShop=iShopDao.queryShopCount(shop);
+    	  System.out.println("符合条件的shopList列表大小："+shopList.size());
+    	 
+     }
+     
 }

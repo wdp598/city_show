@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.skss.city_show.BaseTest;
 import com.skss.city_show.dto.ShopExecution;
 import com.skss.city_show.entity.Shop;
+import com.skss.city_show.entity.ShopCategory;
 import com.skss.city_show.enums.ShopStateEnum;
 
 public class ShopServiceTest extends BaseTest{
@@ -49,17 +50,19 @@ public void testAddShop(){
 	assertEquals(ShopStateEnum.CHCK.getState(),se.getState());
 }
 
-@Test
+
  public void testModfyshop() {
-	Shop shop=new Shop();
-	shop.setShopId(64L);
-	shop.setShopName("修改后的店铺名字64");
-	File shopImg=new File("D:/apache-tomcat-8.0.47/Img/magazine-unlock-02-2.3.781-_0b600ad872d7428fbb72af8be63e373a.jpg");
+	//Shop shop=new Shop();
+	//shop.setShopId(45L);
+	Shop shop=shopService.queryShopByShopId(46L);
+	shop.setShopName("修改后的店铺名字46");
+	shop.setShopImg("F:/magazine-unlock-02-2.3.781-_0b600ad872d7428fbb72af8be63e373a.jpg");
+	File shopImg=new File("F:/magazine-unlock-02-2.3.781-_0b600ad872d7428fbb72af8be63e373a.jpg");
     try {
 		InputStream inputStreamShopImg=new FileInputStream(shopImg);
 		
 		ShopExecution shopExection=	shopService.modifyShop(shop, inputStreamShopImg, "magazine-unlock-02-2.3.781-_0b600ad872d7428fbb72af8be63e373a.jpg");
-   System.out.println("修改后的图片地址：："+shopExection.getShop().getShopImg());
+         System.out.println("修改后的图片地址：："+shopExection.getShop().getShopImg());
     
     } catch (FileNotFoundException e) {
 		// TODO Auto-generated catch block
@@ -68,5 +71,22 @@ public void testAddShop(){
     
 }
 
+public void testqueryshopbyshopIdservice() {
+	Shop shop=shopService.queryShopByShopId(64L);
+	System.out.println(shop.getShopName()+shop.getShopId());
+	
+}
+@Test
+public void testgetShopList() {
+	Shop shopCondition= new Shop();
+	ShopCategory shopCategory=new ShopCategory();
+	shopCategory.setShopCategoryId(3L);
+	
+	ShopExecution se=shopService.getShopList(shopCondition, 4, 10);
+	System.out.println(se.getShopList().size()+"个店铺");
+	System.out.println("店铺总数"+se.getCount());
+}
+
 
 }
+		

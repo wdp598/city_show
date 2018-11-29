@@ -20,7 +20,7 @@ import net.coobird.thumbnailator.geometry.Positions;
  * @author wdp 图片处理工具
  */
 public class ImgUtil {
-	private static String basePath =Thread.currentThread().getContextClassLoader().getResource("").getPath();
+	private static String basePath =Thread.currentThread().getContextClassLoader().getResource("").getPath();//获取当前类路径
 	private static final SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyyMMddHHmmss");/*时间格式对象*/
 	private static final Random random=new Random();/*随机数对象*/
 	private static  Logger logger=LoggerFactory.getLogger(ImgUtil.class);
@@ -30,7 +30,7 @@ public class ImgUtil {
 	 * @return newFile
 	 */
 	public static File transferCommonsMultipartFileToFile(CommonsMultipartFile commonsMultipartFile){
-		File newFile=new File(commonsMultipartFile.getOriginalFilename());
+		File newFile=new File(commonsMultipartFile.getOriginalFilename());//获取原始文件名
 		try {
 			commonsMultipartFile.transferTo(newFile);
 		} catch (IllegalStateException e) {
@@ -117,41 +117,51 @@ public class ImgUtil {
 	 * storePath可能是文件路径或是目录路径，
 	 * 如果是文件路径则删除文件，
 	 * 如果是目录路径则删除目录下的所有文件。
-	 * @param storePath
+	 * @param storePath 数据库里的路径
 	 */
 	public static void  deleteImgFile(String storePath) {
-		File fileOrPath=new File(ImgUtil.basePath+storePath);
-		if(fileOrPath.exists()) {
-		if(fileOrPath.isDirectory()) {//如果storePath是目录路径，则遍历出来递归删除下面的文件
+		File fileOrPath=new File(PathUtil.getImgBasePath()+storePath);
+		System.out.println("PathUtil.getImgBasePath()+storePath=========="+PathUtil.getImgBasePath()+storePath);
+		String imgPath=PathUtil.getImgBasePath()+storePath;
+		if(!imgPath.isEmpty()) {
+		//if(fileOrPath.exists()) {
+			System.out.println("fileOrPath参数存在");
+		if(fileOrPath.isDirectory()) {//如果是目录返回true
 			File files[] =fileOrPath.listFiles();//将目录下的所有文件放入数组
-			for(int i=0;i<files.length;i++) {
-             files[i].delete();//递归删除
+			int i=-1;
+			for( i=0;i<files.length;i++) {
+				System.out.println("删除文件或者文件夹"+files[i].getName());
+				files[i].delete();//递归删除
+				System.out.println("删除成功"+files[i]);
 			}
 			/*for (File f:files) {
 			f.delete()	;
 			}*/		
 		}
-		fileOrPath.delete();
 		}
+		System.out.println("fileOrPath不是目录");
+		fileOrPath.delete();
+		System.out.println("文件删除成功");
 	}
 	
 	
 	
 	
 	
-	/*public static void main(String[] args) {
-		String basePath = Thread.currentThread().getContextClassLoader().getResource("").getPath()
-				.getPath();
-							 * 获取classpath的绝对路径 通过线程逆推到类加载器，通过类加载器得到资源，通过资源得到路径
+/*	public static void main(String[] args) {
+		String basePath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+				//.getPath();
+							 //* 获取classpath的绝对路径 通过线程逆推到类加载器，通过类加载器得到资源，通过资源得到路径
 							 
 		try {
-			Thumbnails.of(new File("D:/apache-tomcat-8.0.47/Img/xiaohuangren.jpg")) 需要打水印和压缩的图片 
+			Thumbnails.of(new File("D:/apache-tomcat-8.0.47/Img/xiaohuangren.jpg")) //需要打水印和压缩的图片 
 					.size(200, 200)
-					.watermark(Positions.CENTER_RIGHT,  水印放在图片里的右下角 
-							ImageIO.read(new File(basePath + "/watermark.jpg")),  读取水印图片流 
-							0.5f) 水印图片透明度 
-					.outputQuality(0.8) 压缩程度 
-					.toFile(new File("D:/apache-tomcat-8.0.47/Img/watermark_xiaohuangren.jpg")); 处理后输出位置 
+					.watermark(Positions.CENTER_RIGHT,  //水印放在图片里的右下角 
+							null, //ImageIO.read(new File(basePath + "/watermark.jpg")),  //读取水印图片流 
+							//ImageIO.read(new File(basePath +)),  //读取水印图片流
+							0.5f) //水印图片透明度 
+					.outputQuality(0.8) //压缩程度 
+					.toFile(new File("D:/apache-tomcat-8.0.47/Img/watermark_xiaohuangren.jpg")); //处理后输出位置 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

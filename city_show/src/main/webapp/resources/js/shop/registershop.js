@@ -5,10 +5,54 @@
  */
 $(function() {
 	
+	var shopId=getQueryString("shopId");
+	//shopId为null返回true
+	var isEdit=shopId?true:false;
+	//获取注册时的初始化信息
 	var initUrl = '/city_show/shopadmin/getshopinitinfo';
+	//注册信息
 	var registerShopUrl = '/city_show/shopadmin/registershop';
-	getShopInitInfo();/*调用自己，使得页面打开即有数据*/
+	//根据shopId获取shop
+	var shopInfoByshopIdUrl="/city_show/shopadmin/getshopbyshopid?shopId="+shopId;
+	//修改店铺信息
+	var modifyShopUrl="/city_show/shopadmin/modifyshop";
+	if(!isEdit){
+		getShopInitInfo();//注册时的初始化信息
+	}else{
+		getShopInfoByshopIdUrl(shopId);//根据shopId获取shop信息
+	}
+		
 	
+		getShopInitInfo();/*调用自己，使得页面打开即有数据*/
+	
+	/***
+	 * 根据shopId获取shop信息
+	 */
+	function getShopInfoByshopIdUrl(shopId){
+		$.getJSON(shopInfoByshopIdUrl,function(data){
+			if(data.success){
+				var shop=data.shop;
+				$('#shop-name').val(shop.shopName);
+				$('#shop-addr').val(shop.shopAddr);
+				$('#shop-phone').val(shop.phone);
+				$('#shop-desc').val(shop.shopDesc);
+				var shopCategory='<option data-id="'+shop.shopCategory.shopCategoryId+'"selected>'+shop.shopCategory.shopCategoryName+'</option>';
+				var tempAreaHtml="";
+				data.areaList.map(function(item, index) {
+					tempAreaHtml += '<option data-id="' + item.areaId + '">'
+							+ item.areaName + '</option>';
+			});
+				$('#shop-category').html(shopCategory);	
+				$('#shop-category').attr('disabled','disabled');
+				$('#shop-area').html(tempAreaHtml);
+//				$('#shop-area').attr('data-id',shop.areaId);
+				$("#shop-area option[data-id='"+shop.area.areaId+"']").attr("selected","selected");
+			}
+		});
+				
+	}
+		
+
 	/**
 	 * 
 	 * 获取店铺区域，店铺类别并展示在页面上
@@ -19,7 +63,7 @@ $(function() {
 				var tempHtml = '';
 				var tempAreaHtml = '';
 				data.shopCategoryList.map(function(item, index) {/*?????*/
-					tempHtml += '<option data-id="' + item.shopCategoryId
+					tempHtml += '<option data-id="' + item.shopCategoryId 
 							+ '">' + item.shopCategoryName + '</option>';
 				});
 				data.areaList.map(function(item, index) {
@@ -38,9 +82,11 @@ $(function() {
 	 */
 	$('#submit').click(function() {
 		var shop = {};
+		if(isEdit){
+			shop.shopId=shopId;
+		}
 		shop.shopName = $('#shop-name').val();
 		if(!shop.shopName){
-			/*$.toast('请输入店铺名字！')*/
 			alert('请输入店铺名字！')
 			return;
 		}
@@ -88,8 +134,8 @@ $(function() {
 		/**
 		 * 通过ajax提交到后台
 		 */
-		$.ajax({
-			url : registerShopUrl,
+		 $.ajax({  
+			url : (isEdit?modifyShopUrl:registerShopUrl),
 			type : 'POST',
 			data : formData,/*发送到服务器的数据*/
 			contentType : false,
@@ -98,9 +144,8 @@ $(function() {
 			success : function(data) {
 				if (data.success) {
 					$.toast('提交成功')
-					/*alert("提交成功")*/
 				} else {
-					$.toast('哈哈提交失败！' + data.errMsg);
+					$.toast('注册失败！' + data.errMsg);
 				}
 				$('#captcha-img').click();/*不论是否成功 都主动调用验证码控件的点击事件方法该变验证码*/
 			}

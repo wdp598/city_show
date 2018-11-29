@@ -3,40 +3,125 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skss.city_show.dao.IshopDao">
-<!-- 根据店铺id查询店铺  返或基本店铺信息以及区域信息 商品类别信息-->
-<resultMap type="com.skss.city_show.entity.Shop" 
-   id="selectShopByShopId">
-	<id column="shop_id" property="shopId" />
-	<result column="SHOP_NAME" property="shopName" />
-	<result column="SHOP_DESC" property="shopDesc" />
-	<result column="SHOP_ADDR" property="shopAddr" />
-	<result column="PHONE" property="phone" />
-	<result column="SHOP_IMG" property="shopImg" />
-	<result column="PRIORITY" property="priority" />
-	<result column="CREATE_TIME" property="createTime" />
-	<result column="LASTEDIT_TIME" property="lastEditTime" />
-	<result column="ENABLE_STATUS" property="enableStatus" />
-	<result column="ADVICE" property="advice" />
-	<!-- 定义复合类型 -->
-	 <association property="area" column="AREA_ID"
-		javaType="com.skss.city_show.entity.Area">
-		<id column="AREA_ID" property="areaId" />
-		<result column="AREA_NAME" property="areaName" />
-	</association> 
-	<association property="shopCategory"
-		column="SHOP_CATEGORY_ID"
-		javaType="com.skss.city_show.entity.ShopCategory">
-		<id column="SHOPCATEGORY_ID" property="shopCategoryId" />
-		<result column="SHOPCATEGORY_NAME" property="shopCategoryName" />
-	</association> 
-	<association property="owner" column="OWNER_ID"
-		javaType="com.skss.city_show.entity.PersonInfo">
-	<id column="USER_ID" property="userId" />
-	<result column="NAME" property="name" />  
-	</association>
-</resultMap>
-	<select id="queryShopByShopId" resultMap="selectShopByShopId"
-		parameterType="Long">
+	<!-- 根据店铺id查询店铺 返或基本店铺信息以及区域信息 商品类别信息 -->
+	<resultMap type="com.skss.city_show.entity.Shop"
+		id="selectShopByShopId">
+		<id column="shop_id" property="shopId" />
+		<result column="SHOP_NAME" property="shopName" />
+		<result column="SHOP_DESC" property="shopDesc" />
+		<result column="SHOP_ADDR" property="shopAddr" />
+		<result column="PHONE" property="phone" />
+		<result column="SHOP_IMG" property="shopImg" />
+		<result column="PRIORITY" property="priority" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="LASTEDIT_TIME" property="lastEditTime" />
+		<result column="ENABLE_STATUS" property="enableStatus" />
+		<result column="ADVICE" property="advice" />
+		<!-- 定义复合类型 -->
+		<association property="area" column="AREA_ID"
+			javaType="com.skss.city_show.entity.Area">
+			<id column="AREA_ID" property="areaId" />
+			<result column="AREA_NAME" property="areaName" />
+		</association>
+		<association property="shopCategory"
+			column="SHOP_CATEGORY_ID"
+			javaType="com.skss.city_show.entity.ShopCategory">
+			<id column="SHOPCATEGORY_ID" property="shopCategoryId" />
+			<result column="SHOPCATEGORY_NAME" property="shopCategoryName" />
+		</association>
+		<association property="owner" column="OWNER_ID"
+			javaType="com.skss.city_show.entity.PersonInfo">
+			<id column="USER_ID" property="userId" />
+			<result column="NAME" property="name" />
+		</association>
+	</resultMap>
+	<!-- 分页查询 -->
+	 <select id="queryShopList" resultMap="selectShopByShopId">
+		SELECT * FROM
+		(select rownum as rw, a1.*
+		FROM (SELECT
+		s.shop_id,
+		s.SHOP_NAME,
+		s.SHOP_DESC,
+		s.SHOP_ADDR,
+		s.PHONE,
+		s.SHOP_IMG,
+		s.PRIORITY,
+		s.CREATE_TIME,
+		s.LASTEDIT_TIME,
+		s.ENABLE_STATUS,
+		s.ADVICE,
+		a.AREA_ID,
+		a.AREA_NAME,
+		sc.SHOPCATEGORY_ID,
+		sc.SHOPCATEGORY_NAME
+		FROM
+		tb_shop s,
+		tb_area a,
+		tb_shop_Category sc
+		<where>
+			<if
+				test="shopCondition.shopCategory!=null and shopCondition.shopCategory.shopCategoryId!=null">
+				and
+				s.SHOPCATEGORY_ID=#{shopCondition.shopCategory.shopCategoryId}
+			</if>
+			<if
+				test="shopCondition.area!=null and shopCondition.area.areaId!=null">
+				and s.AREA_ID=#{shopCondition.area.areaId}
+			</if>
+			<if test="shopCondition.shopName!=null">
+				and s.SHOP_NAME like '%${shopCondition.shopName}%'
+			</if>
+			<if test="shopCondition.enableStatus!=null">
+				s.ENABLE_STATUS=#{shopCondition.enableStatus}
+			</if>
+			<if
+				test="shopCondition.owner!=null and shopCondition.owner.userId!=null">
+				s.AREA_ID=#{shopCondition.owner.userId}
+			</if>
+			AND
+			s.AREA_ID=a.AREA_ID
+			AND
+			s.SHOP_CATEGORY_ID=sc.SHOPCATEGORY_ID 
+		</where> 
+	  <![CDATA[
+                     ORDER BY s.PRIORITY DESC) a1
+              where rownum <= #{pageSize}*2) b
+      where b.rw <=#{pageSize} * (2 - 1) 
+      ]]>
+		<!-- <![CDATA[]]> 被该标签包裹的，将将编译为纯文本 
+		-->
+	</select>
+	<!-- 符合查询条件的shop数量 -->
+  <select id="queryShopCount" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM tb_shop s,tb_area a,tb_shop_Category sc
+    <where>
+      <if
+        test="shopCondition.shopCategory!=null and shopCondition.shopCategory.shopCategoryId!=null">
+        and
+        s.SHOPCATEGORY_ID=#{shopCondition.shopCategory.shopCategoryId}
+      </if>
+      <if
+        test="shopCondition.area!=null and shopCondition.area.areaId!=null">
+        and s.AREA_ID=#{shopCondition.area.areaId}
+      </if>
+      <if test="shopCondition.shopName!=null">
+        and s.SHOP_NAME like "%shopCondition.shopName%"
+      </if>
+      <if test="shopCondition.enableStatus!=null">
+        s.ENABLE_STATUS=#{shopCondition.enableStatus}
+      </if>
+      <if
+        test="shopCondition.owner!=null and shopCondition.owner.userId!=null">
+        s.AREA_ID=#{shopCondition.owner.userId}
+      </if>
+      AND
+      s.AREA_ID=a.AREA_ID
+      AND
+      s.SHOP_CATEGORY_ID=sc.SHOPCATEGORY_ID
+    </where>
+  </select>
+	<select id="queryShopByShopId" resultMap="selectShopByShopId" parameterType="Long">
 		SELECT
 		s.shop_id,
 		s.SHOP_NAME,
@@ -61,41 +146,43 @@
 		s.AREA_ID=a.AREA_ID
 		AND
 		s.SHOP_CATEGORY_ID=sc.SHOPCATEGORY_ID
-	    AND
+		AND
 		s.SHOP_ID=#{shopId}
 	</select>
 
-	<insert id="insertShop" useGeneratedKeys="true" keyColumn="shop_id"
-		keyProperty="shopId">  <!-- 使用jdbc的getGeneratedKeys获取数据库自增主键值 在mybatis-cconfig中配置 -->
+	<insert id="insertShop" useGeneratedKeys="true"
+		keyColumn="shop_id" keyProperty="shopId">  <!-- 使用jdbc的getGeneratedKeys获取数据库自增主键值 在mybatis-cconfig中配置 -->
 		insert into
 		tb_shop(OWNER_ID,AREA_ID,SHOP_CATEGORY_ID,SHOP_NAME,SHOP_DESC,SHOP_ADDR,PHONE,SHOP_IMG,PRIORITY,CREATE_TIME,LASTEDIT_TIME,ENABLE_STATUS,ADVICE)
 		values
 		(#{owner.userId},#{area.areaId},#{shopCategory.shopCategoryId},#{shopName},#{shopDesc},#{shopAddr},#{phone},#{shopImg},#{priority},#{createTime},#{lastEditTime},#{enableStatus},#{advice})
 
 	</insert>
-	<!-- 更改店铺信息  传入一个shop实体类，什么不为空就更改什么内容 -->
-<update id="updateShop" parameterType="com.skss.city_show.entity.Shop">
-   update tb_shop <!-- 此处使用的是动态sql语句 -->
-     <set>
-     <!-- <if test="xxx001!=null">xxx_xxx=#{xxx001}</if>  xxx001表示实体类里面的某个属性   xxx_xxx表示数据库里面与实体类相对应的字段-->
-     <if test="shopName!=null">SHOP_NAME=#{shopName},</if>
-     <if test="shopDesc!=null">SHOP_DESC=#{shopDesc},</if>
-     <if test="shopAddr!=null">SHOP_ADDR=#{shopAddr},</if>
-     <if test="phone!=null">PHONE=#{phone},</if>
-     <if test="priority!=null">PRIORITY=#{priority},</if>
-     <if test="lastEditTime!=null">LASTEDIT_TIME=#{lastEditTime},</if>
-     <if test="enableStatus!=null">ENABLE_STATUS=#{enableStatus},</if>
-     <if test="advice!=null">ADVICE=#{advice},</if>
-     <if test="shopImg!=null">SHOP_IMG=#{shopImg},</if>
-     <if test="shopCategory!=null">SHOP_CATEGORY_ID=#{shopCategory.shopCategoryId},</if>
-     <if test="area!=null">OWNER_ID=#{owner.userId}</if> <!-- 最后一个if不用， -->
-     </set>
-     <where>
-          <if test="shopId!=0">
-           SHOP_ID=#{shopId}
-          </if>  
-     </where>
-    <!--  where shop_id=#{shopId} -->
-</update>
+	<!-- 更改店铺信息 传入一个shop实体类，什么不为空就更改什么内容 -->
+	<update id="updateShop"
+		parameterType="com.skss.city_show.entity.Shop">
+		update tb_shop <!-- 此处使用的是动态sql语句 -->
+		<set>
+			<!-- <if test="xxx001!=null">xxx_xxx=#{xxx001}</if> xxx001表示实体类里面的某个属性 
+				xxx_xxx表示数据库里面与实体类相对应的字段 -->
+			<if test="shopName!=null">SHOP_NAME=#{shopName},</if>
+			<if test="shopDesc!=null">SHOP_DESC=#{shopDesc},</if>
+			<if test="shopAddr!=null">SHOP_ADDR=#{shopAddr},</if>
+			<if test="phone!=null">PHONE=#{phone},</if>
+			<if test="priority!=null">PRIORITY=#{priority},</if>
+			<if test="lastEditTime!=null">LASTEDIT_TIME=#{lastEditTime},</if>
+			<if test="enableStatus!=null">ENABLE_STATUS=#{enableStatus},</if>
+			<if test="advice!=null">ADVICE=#{advice},</if>
+			<if test="shopImg!=null">SHOP_IMG=#{shopImg},</if>
+			<if test="shopCategory!=null">SHOP_CATEGORY_ID=#{shopCategory.shopCategoryId},</if>
+			<if test="area!=null">OWNER_ID=#{owner.userId}</if> <!-- 最后一个if不用， -->
+		</set>
+		<where>
+			<if test="shopId!=0">
+				SHOP_ID=#{shopId}
+			</if>
+		</where>
+		<!-- where shop_id=#{shopId} -->
+	</update>
 
 </mapper> 

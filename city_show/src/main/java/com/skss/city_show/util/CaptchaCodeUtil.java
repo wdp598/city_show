@@ -19,7 +19,7 @@ public class CaptchaCodeUtil {
 	 * 比较输入的与图片中生成的否一致
 	 * 
 	 * @param request
-	 * @return
+	 * @return boolean
 	 */
 	public static boolean comparisonCaptchaCode(HttpServletRequest request) {
 		
