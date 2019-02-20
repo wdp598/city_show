@@ -3,6 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.skss.city_show.dao.IproductCategoryDao">
+	<!-- 查询商品类别 -->
 	<select id="queryProductCategoryList"
 		resultType="com.skss.city_show.entity.ProductCategory"
 		parameterType="Long">
@@ -16,9 +17,34 @@
 		from
 		tb_product_category
 		where
-		SHOP_ID = #{shopId}<!-- 参数末尾不能有符号（包括分号）否则会造成参数无效 -->
+		SHOP_ID = #{shopId}<!-- 
+			参数末尾不能有符号（包括分号）否则会造成参数无效 -->
 		order by PRIORITY desc
 	</select>
 
+	<!-- 商品类别批量插入 批量插入时一定要显示的写明useGeneratedKeys="false" 否则会报 “命令未正确结束”的错 -->
+	<insert id="batchInsertProductCatagory" useGeneratedKeys="false"
+		parameterType="java.util.List">
+		INSERT INTO tb_product_category(PRODUCT_CATEGORY_NAME, PRIORITY,
+		CREATE_TIME, SHOP_ID)
+		(
+		<foreach collection="list" item="productCategory" index=""
+			separator="union all">
+			select
+			#{productCategory.productCategoryName,jdbcType=VARCHAR},
+			#{productCategory.priority, jdbcType=INTEGER},
+			#{productCategory.createTime, jdbcType=TIMESTAMP},
+			#{productCategory.shopId, jdbcType=INTEGER}
+			<!-- #{productCategory.lastEditTime} -->
+			from dual
+		</foreach>
+		)
+	</insert>
+
+<!-- 删除指定商品类别 -->
+<delete id="deleteProductCatagory">
+	delete from tb_product_category where
+	PRODUCT_CATEGORY_ID=#{productCategoryId} and SHOP_ID=#{shopId}
+</delete>
 
 </mapper>

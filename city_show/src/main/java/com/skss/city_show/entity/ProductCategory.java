@@ -31,6 +31,7 @@ public class ProductCategory {
 	 */
 	private Date lastEditTime;
 
+
 	public Long getProductCategoryId() {
 		return productCategoryId;
 	}

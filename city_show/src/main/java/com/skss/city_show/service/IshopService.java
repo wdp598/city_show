@@ -2,8 +2,6 @@ package com.skss.city_show.service;
 
 import java.io.InputStream;
 
-import org.apache.ibatis.annotations.Param;
-
 import com.skss.city_show.dto.ShopExecution;
 import com.skss.city_show.entity.Shop;
 

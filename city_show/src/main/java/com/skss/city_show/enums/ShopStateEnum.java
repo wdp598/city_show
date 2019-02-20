@@ -5,8 +5,13 @@ package com.skss.city_show.enums;
  * @since 20180303 店铺状态int值与店铺状态标志类
  */
 public enum ShopStateEnum {
-	CHCK(0, "审核中"), OFFLINE(-1, "非法店铺"), SUCESS(1, "操作成功"), PASS(2, "通过认证"), INNER_ERROR(-1001,
-			"内部系统错误"), NULL_SHOPID(-1002, "shopId为空"),NULL_SHOP(-1003,"shop信息为空");
+	CHCK(0, "审核中"), 
+	OFFLINE(-1, "非法店铺"), 
+	SUCESS(1, "操作成功"), 
+	PASS(2, "通过认证"), 
+	INNER_ERROR(-1001,"内部系统错误"), 
+	NULL_SHOPID(-1002, "shopId为空"), 
+	NULL_SHOP(-1003, "shop信息为空");
 
 	private int state;
 	private String stateInfo;
