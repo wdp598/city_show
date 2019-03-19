@@ -19,7 +19,8 @@ public class ShopAdminController {
  */
 @RequestMapping(value="/shopoperation")
 	public String shopoperation(){
-		return "shop/registerShop";
+		//return "shop/registerShop";
+	return "shop/GIS/index";
 	}
 	
 /**

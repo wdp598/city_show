@@ -24,6 +24,14 @@
 
 
 	<dependencies>
+	<!-- 连接redis包 -->
+	<!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+<dependency>
+    <groupId>redis.clients</groupId>
+    <artifactId>jedis</artifactId>
+    <version>3.0.1</version>
+</dependency>
+	
 	<!-- 远程连接包 -->
 	<!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
 <dependency>
